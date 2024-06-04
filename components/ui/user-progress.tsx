@@ -24,8 +24,8 @@ export const UserProgress = ({
                         src={activeCourse.imageSrc}
                         alt={activeCourse.title}
                         className="rounded-md border"
-                        width={32}
-                        height={32}
+                        width={48}
+                        height={48}
                     />
                 </Button>
             </Link>

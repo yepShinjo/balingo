@@ -9,7 +9,7 @@ export default function Home() {
     <div className="max-w-[988px] mx-auto flex-1 w-full flex flex-col lg:flex-row items-center justify-center p-4 gap-2">
 
       <div className="relative w-[240px] h-[240px] lg:w-[424px] lg:h-[424px] mb-8 lg:mb-0">
-        <Image src="/hero.svg" fill alt="Hero" />
+        <Image src="/marketingBebe.png" fill alt="marketingBebe" />
       </div>
 
       <div className="flex flex-col items-center gap-y-8">
@@ -30,7 +30,7 @@ export default function Home() {
                 forceRedirectUrl="NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL"
                 signInForceRedirectUrl="NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL">
                 <Button size="lg" variant="secondary" className="w-full">
-                  Get Started
+                  Ngeranjing
                 </Button>
               </SignUpButton>
               <SignInButton 
@@ -38,7 +38,7 @@ export default function Home() {
                 forceRedirectUrl="NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL"
                 signUpForceRedirectUrl="NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL">
                 <Button size="lg" variant="primaryOutline" className="w-full">
-                  I already have an account
+                  Rage sube ngelah akun
                 </Button>
               </SignInButton>
             </SignedOut>
@@ -46,7 +46,7 @@ export default function Home() {
             <SignedIn>
               <Button size="lg" variant="secondary" className="w-full" asChild>
                 <Link href="/learn">
-                  Continue Learning
+                  Lantur Melajah
                 </Link>
               </Button>
             </SignedIn>
