@@ -7,8 +7,8 @@ export const Footer = () => {
             <div className="max-w-screen-lg mx-auto flex items-center justify-evenly h-full">
                 <Button size="lg" variant="ghost" className="w-full">
                     <Image 
-                        src="/badge1.svg" 
-                        alt="badge1" 
+                        src="/sor.svg" 
+                        alt="sor" 
                         height={32} 
                         width={40} 
                         className="mr-4 rounded-md"/>
@@ -16,8 +16,8 @@ export const Footer = () => {
                 </Button>
                 <Button size="lg" variant="ghost" className="w-full">
                     <Image 
-                        src="/badge2.svg" 
-                        alt="badge2" 
+                        src="/mider.svg" 
+                        alt="mider" 
                         height={32} 
                         width={40} 
                         className="mr-4 rounded-md"/>
@@ -25,8 +25,8 @@ export const Footer = () => {
                 </Button>
                 <Button size="lg" variant="ghost" className="w-full">
                     <Image 
-                        src="/badge3.svg" 
-                        alt="badge3" 
+                        src="/singgih.svg" 
+                        alt="singgih" 
                         height={32} 
                         width={40} 
                         className="mr-4 rounded-md"/>
