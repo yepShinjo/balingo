@@ -1,15 +1,4 @@
-## everysingle component and page created in the app folder is also a server component 
-
-Folder structure :
-
-(marketing)
-contains signup page
-
-(main)
-contains the actual app from the default route (which is /learn) and others
-    | learn |
-    this is the default route
-
+# all necessary explanation of the how's and why's for the DB
 
 ## migration error
 
@@ -105,7 +94,7 @@ Fields Connecting:
             fields: [units.courseId],
             references: [courses.id],
         }),
-        lesson: many(lessons),
+        lessons: many(lessons),
     }))
 
     export const lessons = pgTable("lessons", {
@@ -128,3 +117,53 @@ connecting **units** with **lessons** => one units can have many lessons
 notice in the above type of connection and examples we can only have "one to one" or "one to many" because it is always seen from the "Base Table"
 one Base Table can have {one} relation with end table, or
 one Base Table can have {many} relation with end table. Thats all
+
+
+
+## queries.tsx
+### here is what it would look like after querying the code like this (taking all those different data from all the different table that are related to one another )
+
+#### The Code
+    const data = await db.query.units.findMany({
+        where: eq(units.courseId, userProgress.activeCourse.id),
+        with: {
+            lessons: {
+                with: {challenges: {
+                    with: {
+                        challengeProgress: true,
+                    }
+                }},
+            }
+        }
+    })
+
+#### The Visualization
+    [
+    {
+        "id": 1,
+        "title": "Unit 1",
+        "courseId": 101,
+        "order": 1,
+        "lessons": [
+        {
+            "id": 10,
+            "title": "Lesson 1",
+            "unitId": 1,
+            "order": 1,
+            "challenges": [
+            {
+                "id": 100,
+                "title": "Challenge 1",
+                "lessonId": 10,
+                "order": 1,
+                "challengeProgress": {
+                "id": 1000,
+                "status": "complete",
+                "challengeId": 100
+                }
+            }
+            ]
+        }
+        ]
+    }
+    ]

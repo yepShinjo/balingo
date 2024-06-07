@@ -14,6 +14,11 @@ const main = async () => {
 
         await db.delete(schema.courses)
         await db.delete(schema.userProgress)
+        await db.delete(schema.units)
+        await db.delete(schema.lessons)
+        await db.delete(schema.challenges)
+        await db.delete(schema.challengeOptions)
+        await db.delete(schema.challengeProgress)
 
         await db.insert(schema.courses).values([
             // i put id inside, but i dont need to, cuz i used serial (which will auto increment) in the schema.ts instead of integer
@@ -33,6 +38,71 @@ const main = async () => {
                 imageSrc: "/sor.svg"
             },
         ])
+
+        await db.insert(schema.units).values([
+            {
+                id: 1,
+                courseId: 1, // singgih
+                title: "Unit 1",
+                description: "Melajah basa bali singgih sewai wai",
+                order: 1
+            },
+            
+        ])
+
+        await db.insert(schema.lessons).values([
+            {
+                id: 1,
+                unitId: 1, // Unit 1 (Melajah basa bali singgih sewai wai)
+                title: "kruna kria", // kata kerja
+                order: 1
+            },
+        ])
+
+        await db.insert(schema.challenges).values([
+            {
+                id: 1,
+                lessonId: 1,
+                type: "SELECT",
+                order: 1,
+                question: 'nu cen sane "muani"?'
+            },
+            {
+                id: 2,
+                lessonId: 1,
+                type: "ASSIST",
+                order: 1,
+                question: 'nu cen sane "muani"?'
+            },
+        ])
+
+        await db.insert(schema.challengeOptions).values([
+            {
+                id: 1,
+                challengeId: 1,
+                text: "Muani",
+                correct: true,
+                imageSrc: "/muani.png",
+                audioSrc: "/singgih_muani.mp3"
+            },
+            {
+                id: 2,
+                challengeId: 1,
+                text: "luh",
+                correct: false,
+                imageSrc: "/luh.png",
+                audioSrc: "/singgih_luh.mp3"
+            },
+            {
+                id: 3,
+                challengeId: 1,
+                text: "Robot",
+                correct: false,
+                imageSrc: "/robot.png",
+                audioSrc: "/singgih_robot.mp3"
+            },
+        ])
+
         console.log("Seeding finished")
     } catch (error) {
         console.error(error)
