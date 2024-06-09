@@ -2,7 +2,7 @@ import { cache } from "react";
 import db from "./drizzle";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
-import { courses, units, userProgress } from "./schema";
+import { challengeProgress, courses, units, userProgress } from "./schema";
 
 // just like django.
 
@@ -30,10 +30,11 @@ export const getUserProgress = cache(async () => {
 
 // check if userProgress is completed (ie, if it is 100%)
 export const getUnits = cache(async() => {
+    const { userId } = await auth()
     const userProgress = await getUserProgress()
     // but to not waste resources, lets check:
     // if there is no userProgress, or if userProgress doesn't have an activeCourse, just return an empty array
-    if(!userProgress?.activeCourse) {
+    if(!userId || !userProgress?.activeCourse) {
         return []
     }
 
@@ -44,17 +45,26 @@ export const getUnits = cache(async() => {
 
     // the reason why we need this, is because lessons, challenges, and challengeProgress
     // are all related to one another but on all on a different table
+
+    // TODO: Confirm wheter order is needed 
     const data = await db.query.units.findMany({
         where: eq(units.courseId, userProgress.activeCourse.id),
         with: {
             lessons: {
-                with: {challenges: {
-                    with: {
-                        challengeProgress: true,
-                    }
-                }},
-            }
-        }
+                with: {
+                    challenges: {
+                        with: {
+                            challengeProgress: {
+                                where: eq(
+                                    challengeProgress.userId,
+                                    userId
+                                ),
+                            },
+                        },
+                    },
+                },
+            },
+        }, // made me hate curly braces a little, but its ok now
     })
 
     // after getting the necessary data, now we will check if all the challenges are completed
@@ -94,4 +104,42 @@ export const getCourseById = cache(async (courseId: number) => {
     })
 
     return data
+})
+
+// fetch data for user in active course
+export const getCourseProgress = cache(async () => {
+    const { userId } = await auth()
+    const userProgress = await getUserProgress()
+    
+    // if there is no user or no userProgress, just return null. The reason why we also check userProgress.activeCourseId is because TS needed more specification for later on
+    if (!userId || !userProgress || !userProgress.activeCourseId) {
+        return null
+    }
+
+    // find all the units in the active course
+    const unitsInActiveCourse = await db.query.units.findMany({
+        orderBy: (units, { asc }) => [asc(units.order)],
+        where: eq(units.courseId, userProgress.activeCourseId),
+        with: {
+            lessons: {
+                orderBy: (lessons, { asc }) => [asc(lessons.order)],
+                with: {
+                    units: true,
+                    challenges: {
+                        with: {
+                            challengeProgress: {
+                                where: eq(challengeProgress.userId, userId)
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    })
+
+    const firstUncompletedLesson = unitsInActiveCourse.flatMap((unit) => unit.lessons).find((lesson) => {
+        return lesson.challenges.some((challenge) => {
+            return !challenge.challengeProgress || challenge.challengeProgress.length === 0
+        })
+    })
 })

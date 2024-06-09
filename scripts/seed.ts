@@ -57,6 +57,30 @@ const main = async () => {
                 title: "kruna kria", // kata kerja
                 order: 1
             },
+            {
+                id: 2,
+                unitId: 1,
+                title: "kruna aran", // kata kerja
+                order: 2
+            },
+            {
+                id: 3,
+                unitId: 1,
+                title: "kruna 3", // kata kerja
+                order: 3
+            },
+            {
+                id: 4,
+                unitId: 1,
+                title: "kruna 4", // kata kerja
+                order: 4
+            },
+            {
+                id: 5,
+                unitId: 1,
+                title: "kruna 5", // kata kerja
+                order: 5
+            },
         ])
 
         await db.insert(schema.challenges).values([
