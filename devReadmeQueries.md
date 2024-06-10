@@ -234,3 +234,110 @@ so, what the code does is basically flatMapping the entire data
     };
 
 The firstUncompletedLesson essentially flattens the structure by one level compared to the unitsInActiveCourse. Instead of having units containing lessons, it directly provides the first lesson that meets the condition of having an uncompleted challenge. This reduces the hierarchy by one level, making it easier to work with the specific lesson that needs attention or further processing based on your application logic.
+
+
+### getLesson
+
+#### the code
+
+    const normalizedChallenges = data.challenges.map((challenge) => {
+        const completed = 
+            challenge.challengeProgress && 
+            challenge.challengeProgress.length > 0 && 
+            challenge.challengeProgress.every((progress) => progress.completed)
+
+        return {...challenge, completed}
+    })
+
+    return { ...data, challenges: normalizedChallenges }
+
+#### the visualization
+
+data before normalized
+
+    {
+        id: 1,
+        title: "Sample Lesson",
+        challenges: [
+            {
+                id: 1,
+                question: "What is 2 + 2?",
+                challengeProgress: [
+                    { userId: 1, completed: true }
+                ]
+            },
+            {
+                id: 2,
+                question: "What is 3 + 5?",
+                challengeProgress: [
+                    { userId: 1, completed: false }
+                ]
+            },
+            {
+                id: 3,
+                question: "What is 10 - 4?",
+                challengeProgress: []
+            }
+        ]
+    }
+
+
+data after each challenge is normalized
+return {...challenge, completed} 
+
+    [
+        {
+            id: 1,
+            question: "What is 2 + 2?",
+            challengeProgress: [
+                { userId: 1, completed: true }
+            ],
+            completed: true
+        },
+        {
+            id: 2,
+            question: "What is 3 + 5?",
+            challengeProgress: [
+                { userId: 1, completed: false }
+            ],
+            completed: false
+        },
+        {
+            id: 3,
+            question: "What is 10 - 4?",
+            challengeProgress: [],
+            completed: false
+        }
+    ]
+
+data after all the data is normaziled (maybe its a bit confusing, but all the data are just challenges. the difference is that, here we added the lesson that correspond to those challenges)
+
+    {
+        id: 1,
+        title: "Sample Lesson",
+        challenges: [
+            {
+                id: 1,
+                question: "What is 2 + 2?",
+                challengeProgress: [
+                    { userId: 1, completed: true }
+                ],
+                completed: true
+            },
+            {
+                id: 2,
+                question: "What is 3 + 5?",
+                challengeProgress: [
+                    { userId: 1, completed: false }
+                ],
+                completed: false
+            },
+            {
+                id: 3,
+                question: "What is 10 - 4?",
+                challengeProgress: [],
+                completed: false
+            }
+        ]
+    }
+

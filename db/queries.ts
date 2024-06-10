@@ -2,7 +2,7 @@ import { cache } from "react";
 import db from "./drizzle";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
-import { challengeProgress, courses, units, userProgress } from "./schema";
+import { challengeProgress, courses, lessons, units, userProgress } from "./schema";
 
 // just like django.
 
@@ -73,6 +73,11 @@ export const getUnits = cache(async() => {
     const normalizedData = data.map((unit) => {
         // for each unit, map over each lesson
         const lessonsWithCompletedStatus = unit.lessons.map((lesson) => {
+            if (
+                lesson.challenges.length === 0
+            ) {
+                return {...lesson, completed: false}
+            }
             // for each lesson, check if all the challenges are completed
             const allCompletedChallenges = lesson.challenges.every((challenge) => {
                 // check if challenge.challengeProgress exist
@@ -136,10 +141,88 @@ export const getCourseProgress = cache(async () => {
             },
         },
     })
-
+    // the ONE following line. This is equivalent to taking all the lessons from each unit and putting them into one big list of lessons
     const firstUncompletedLesson = unitsInActiveCourse.flatMap((unit) => unit.lessons).find((lesson) => {
         return lesson.challenges.some((challenge) => {
-            return !challenge.challengeProgress || challenge.challengeProgress.length === 0
+            return !challenge.challengeProgress || challenge.challengeProgress.length === 0 || challenge.challengeProgress.some((progress) => progress.completed === false)
         })
     })
+
+    return {
+        activeLesson: firstUncompletedLesson,
+        activeLessonId: firstUncompletedLesson?.id
+    }
+})
+
+// if they click on a specific lesson and we have an ID of that lesson then we're gonna laod that lesson. 
+//otherwise load the first uncompleted lesson for the user (which we got from getCourseProgress)
+export const getLesson = cache(async (id?: number) => {
+    const { userId } = await auth()
+
+    if (!userId) {
+        return null
+    }
+
+    const courseProgress = await getCourseProgress()
+
+    // we dont import id? why?
+    // cuz we use this function inside another component bruh
+    const lessonId = id || courseProgress?.activeLessonId
+
+    if(!lessonId) {
+        return null
+    }
+
+    const data = await db.query.lessons.findFirst({
+        where: eq(lessons.id, lessonId),
+        with: {
+            challenges: {
+                orderBy: (challenges, { asc }) => [asc(challenges.order)],
+                with: {
+                    challengeOptions: true,
+                    challengeProgress: {
+                        where: eq(challengeProgress.userId, userId)
+                    },
+                },
+            },
+        },
+    })
+
+    if (!data || !data.challenges) {
+        return null
+    }
+
+    // The normalization process combines data from the challenges table with data from the challengeProgress table, and it adds a new completed attribute to each challenge.
+
+    // Remember that we do not modify the database here, but just creating a new object to store these normalized data
+    const normalizedChallenges = data.challenges.map((challenge) => {
+        const completed = 
+            challenge.challengeProgress && 
+            challenge.challengeProgress.length > 0 && 
+            challenge.challengeProgress.every((progress) => progress.completed)
+
+        return {...challenge, completed}
+    })
+
+    return { ...data, challenges: normalizedChallenges }
+})
+
+
+export const getLessonPercentage = cache(async () => {
+    const courseProgress = await getCourseProgress()
+
+    if(!courseProgress?.activeLessonId) {
+        return 0
+    }
+
+    const lesson = await getLesson(courseProgress.activeLessonId)
+
+    if (!lesson) {
+        return 0
+    }
+
+    const completedChallenges = lesson.challenges.filter((challenge) => challenge.completed)
+    const percentage = Math.round((completedChallenges.length / lesson.challenges.length) * 100,)
+
+    return percentage
 })

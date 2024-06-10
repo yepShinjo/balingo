@@ -2,23 +2,33 @@ import { FeedWrapper } from "@/components/ui/feed-wrapper"
 import { StickyWrapper } from "@/components/ui/sticky-wrapper"
 import { Header } from "./header"
 import { UserProgress } from "@/components/ui/user-progress"
-import { getUnits, getUserProgress } from "@/db/queries"
+import { getCourseProgress, getLessonPercentage, getUnits, getUserProgress } from "@/db/queries"
 import { redirect } from "next/navigation"
 import { Unit } from "./unit"
 
 const LearnPage = async () => {
     const userProgressData = getUserProgress()
+    const courseProgressData = getCourseProgress()
+    const lessonPercentageData = getLessonPercentage()
     const unitsData = getUnits()
     // try to use Promise instead of await (idk, nextJS said its the best)
     const [
         userProgress,
         units,
+        courseProgress,
+        lessonPercentage,
     ] = await Promise.all([
         userProgressData,
-        unitsData
+        unitsData,
+        courseProgressData,
+        lessonPercentageData,
     ])
 
     if (!userProgress || !userProgress.activeCourse) {
+        redirect("/courses")
+    }
+
+    if (!courseProgress || !courseProgress.activeLesson) {
         redirect("/courses")
     }
 
@@ -43,8 +53,8 @@ const LearnPage = async () => {
                             description={unit.description}
                             title={unit.title}
                             lessons={unit.lessons}
-                            activeLesson={undefined}
-                            activeLessonPercentage={0}
+                            activeLesson={courseProgress.activeLesson}
+                            activeLessonPercentage={lessonPercentage}
                         />
                     </div>
                 ))}

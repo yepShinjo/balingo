@@ -9,6 +9,7 @@ import {
   SignedOut,
   UserButton
 } from '@clerk/nextjs'
+import { ExitModal } from "@/components/modals/exit-modal";
 
 const font = Nunito({ subsets: ["latin"] });
 
@@ -27,6 +28,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={font.className}>
           <Toaster />
+          <ExitModal />
           {children}
           </body>
       </html>

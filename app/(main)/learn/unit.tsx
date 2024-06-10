@@ -14,7 +14,7 @@ type Props = {
     })[]
     // An object representing the active lesson. It includes all properties inferred from the lessons table, plus a unit property (which is an object with properties inferred from the units table). This can also be undefined if there is no active lesson.
     activeLesson: typeof lessons.$inferSelect & {
-        unit: typeof units.$inferSelect
+        units: typeof units.$inferSelect
     } | undefined
     activeLessonPercentage: number
 }
