@@ -1,8 +1,8 @@
-import LessonPage from "./page"
-
 type Props = {
     children: React.ReactNode
 }
+
+console.log("Layout Loaded"); // This will log on the server
 
 const LessonLayout = ({ children }: Props) => {
     return (

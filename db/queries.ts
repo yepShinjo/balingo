@@ -2,7 +2,7 @@ import { cache } from "react";
 import db from "./drizzle";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
-import { challengeProgress, courses, lessons, units, userProgress } from "./schema";
+import { challengeOptions, challengeProgress, challenges, courses, lessons, units, userProgress } from "./schema";
 
 // just like django.
 
@@ -181,12 +181,12 @@ export const getLesson = cache(async (id?: number) => {
                 with: {
                     challengeOptions: true,
                     challengeProgress: {
-                        where: eq(challengeProgress.userId, userId)
+                        where: eq(challengeProgress.userId, userId),
                     },
                 },
             },
         },
-    })
+    });
 
     if (!data || !data.challenges) {
         return null

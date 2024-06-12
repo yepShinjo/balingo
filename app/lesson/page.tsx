@@ -1,11 +1,12 @@
 import { getLesson, getUserProgress } from "@/db/queries"
 import { redirect } from "next/navigation"
 import { Quiz } from "./quiz"
+import { challengeOptions } from "@/db/schema"
 
 
 const LessonPage = async () => {
-    const lessonData = getLesson()
-    const userProgressData = getUserProgress()
+    const lessonData = await getLesson()
+    const userProgressData = await getUserProgress()
 
     const [
         lesson,
@@ -24,6 +25,7 @@ const LessonPage = async () => {
     .length / lesson.challenges.length * 100
 
     return (
+        <>
         <Quiz
             initialLessonId={lesson.id}
             initialLessonChallenges={lesson.challenges}
@@ -31,6 +33,11 @@ const LessonPage = async () => {
             initialPercentage={initialPercentage}
             userSubscription={null}
         />
+        <p>
+            This is Page HOLY
+        </p>
+        </>
+        
     )
 }
 

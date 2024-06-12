@@ -1,9 +1,7 @@
-
 import { useExitModal } from "@/store/use-exit-modal"
 import { Progress } from "@radix-ui/react-progress"
 import { InfinityIcon, X } from "lucide-react"
 import Image from "next/image"
-import { useEffect, useState } from 'react'
 
 type Props = {
     hearts: number
@@ -38,7 +36,6 @@ export const Header = ({
                 {hasActiveSubscription 
                     ? <InfinityIcon className="h-6 w-6 stroke-[3]" />
                     : hearts
-                    
                 }
             </div>
         </header>

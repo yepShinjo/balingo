@@ -6,14 +6,10 @@ import { Header } from "./header"
 import { QuestionBubble } from "./question-bubble"
 import { Challenge } from "./challenge"
 
-
-
 type Props = {
     initialPercentage: number
     initialHearts: number
     initialLessonId: number
-    // THE FRIKKIN PROBLEM is that challengeOptions just retrieve the first challengeOptions (Id number 1) 
-    // instead of the entire challengeOptions that correspond tot the specific challenge
     initialLessonChallenges: (typeof challenges.$inferSelect & {
         completed: boolean
         challengeOptions: typeof challengeOptions.$inferSelect[]
@@ -28,7 +24,7 @@ export const Quiz = ({
     initialLessonChallenges,
     userSubscription,
 }: Props) => {
-    
+    console.log("initialLessonChallenges", initialLessonChallenges);
     const [hearts, setHearts] = useState(50 || initialHearts)
     const [percentage, setPercentage] = useState(50 || initialPercentage)
     const [challenges] = useState(initialLessonChallenges)
