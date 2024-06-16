@@ -1,10 +1,14 @@
 "use client"
 
 import { challengeOptions, challenges } from "@/db/schema"
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { Header } from "./header"
 import { QuestionBubble } from "./question-bubble"
 import { Challenge } from "./challenge"
+import { Footer } from "./footer"
+import { upsertChallengeProgress } from "@/actions/challenge-progress"
+import { toast } from "sonner"
+import { redirect } from "next/dist/server/api-utils"
 
 
 
@@ -28,6 +32,7 @@ export const Quiz = ({
     initialLessonChallenges,
     userSubscription,
 }: Props) => {
+    const [pending, startTransition] = useTransition()
     
     const [hearts, setHearts] = useState(50 || initialHearts)
     const [percentage, setPercentage] = useState(50 || initialPercentage)
@@ -36,11 +41,75 @@ export const Quiz = ({
         const uncompletedIndex = challenges.findIndex((challenge) => !challenge.completed)
         return uncompletedIndex === -1 ? 0 : uncompletedIndex
     })
+
+    const [selectedOption, setSelectedOption] = useState<number>()
+    const [status, setStatus] = useState<"correct" | "wrong" | "none">("none")
     
     const challenge = challenges[activeIndex]
-    // console.log("Challenge:", challenge);
+    
     const options = challenge?.challengeOptions ?? []
-    // console.log("Options:", options);
+
+    console.log("activeIndex", activeIndex)
+
+    const onNext = () => {
+        setActiveIndex((current) => current + 1);
+    };
+    
+    
+    const onSelect = (id: number) => {
+        if (status !== "none") return
+
+        setSelectedOption(id)
+    }
+
+    // will be able to be fired when status is correct or even wrong
+    const onContinue = () => {
+        if (!selectedOption) return
+
+        // if they choose wrong, let them choose again
+        if (status === "wrong") {
+            setStatus("none")
+            setSelectedOption(undefined)
+            return
+        }
+
+        if (status === "correct") {
+            onNext()
+            setStatus("none")
+            setSelectedOption(undefined)
+            return
+        }
+
+        const correctOption = options.find((option) => option.correct)
+
+        if (!correctOption) {
+            return
+        }
+
+        if (correctOption && correctOption.id === selectedOption) {
+            startTransition(() => {
+                upsertChallengeProgress(challenge.id).then((response) => {
+                    if (response?.error === "hearts") {
+                        console.error("missing hearts")
+                        return
+                    }
+
+                    setStatus("correct")
+                    setPercentage((prev) => prev + 100 / challenges.length)
+
+                    // Practice
+                    if (initialPercentage === 100) {
+                        setHearts((prev) => Math.min(prev + 1, 5))
+                    }
+                })
+                .catch(() => toast.error("Something went wrong"))
+            })
+        } else {
+            console.error("incorrect option!")
+        }
+    }
+
+    console.log("challenge", challenge)
 
     const title = challenge.type === "ASSIST" 
         ? "Select the correct meaning" 
@@ -65,9 +134,9 @@ export const Quiz = ({
                             )}
                             <Challenge 
                                 options={options}
-                                onSelect={() => {}}
-                                status="none"
-                                selectedOption={undefined}
+                                onSelect={onSelect}
+                                status={status}
+                                selectedOption={selectedOption}
                                 disabled={false}
                                 type={challenge.type}
                             />
@@ -75,6 +144,11 @@ export const Quiz = ({
                     </div>
                 </div>
             </div>
+            <Footer 
+                disabled={!selectedOption}
+                status={status}
+                onCheck={onContinue}
+            />
         </>
     )
 }

@@ -33,9 +33,6 @@ const LessonPage = async () => {
             initialPercentage={initialPercentage}
             userSubscription={null}
         />
-        <p>
-            This is Page HOLY
-        </p>
         </>
         
     )

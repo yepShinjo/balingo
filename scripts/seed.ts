@@ -89,20 +89,26 @@ const main = async () => {
                 lessonId: 1,
                 type: "SELECT",
                 order: 1,
-                question: 'nu cen sane "muani"?'
+                question: 'mana yang laki-laki?'
             },
             {
                 id: 2,
                 lessonId: 1,
                 type: "ASSIST",
-                order: 1,
-                question: 'nu cen sane "muani"?'
+                order: 2,
+                question: 'laki-laki?'
+            },
+            {
+                id: 3,
+                lessonId: 1,
+                type: "SELECT",
+                order: 3,
+                question: 'mana yang robot?'
             },
         ])
 
         await db.insert(schema.challengeOptions).values([
             {
-                id: 1,
                 challengeId: 1,
                 text: "Muani",
                 correct: true,
@@ -110,7 +116,6 @@ const main = async () => {
                 audioSrc: "/singgih_muani.mp3"
             },
             {
-                id: 2,
                 challengeId: 1,
                 text: "luh",
                 correct: false,
@@ -118,10 +123,54 @@ const main = async () => {
                 audioSrc: "/singgih_luh.mp3"
             },
             {
-                id: 3,
                 challengeId: 1,
                 text: "Robot",
                 correct: false,
+                imageSrc: "/robot.png",
+                audioSrc: "/singgih_robot.mp3"
+            },
+        ])
+
+        await db.insert(schema.challengeOptions).values([
+            {
+                challengeId: 2,
+                text: "Muani",
+                correct: true,
+                audioSrc: "/singgih_muani.mp3"
+            },
+            {
+                challengeId: 2,
+                text: "luh",
+                correct: false,
+                audioSrc: "/singgih_luh.mp3"
+            },
+            {
+                challengeId: 2,
+                text: "Robot",
+                correct: false,
+                audioSrc: "/singgih_robot.mp3"
+            },
+        ])
+
+        await db.insert(schema.challengeOptions).values([
+            {
+                challengeId: 3,
+                text: "Muani",
+                correct: false,
+                imageSrc: "/muani.png",
+                audioSrc: "/singgih_muani.mp3"
+            },
+            {
+                challengeId: 3,
+                text: "luh",
+                correct: false,
+                imageSrc: "/luh.png",
+                audioSrc: "/singgih_luh.mp3"
+            },
+            {
+                challengeId: 3,
+                text: "Robot",
+                correct: true,
                 imageSrc: "/robot.png",
                 audioSrc: "/singgih_robot.mp3"
             },
