@@ -4,6 +4,7 @@ type Props = {
     children: React.ReactNode
 }
 
+// as always, layout for every path. this case, /lesson
 const LessonLayout = ({ children }: Props) => {
     return (
         <div className="flex flex-col h-full">

@@ -1,7 +1,7 @@
 "use client"
 
 import { challengeOptions, challenges } from "@/db/schema"
-import { useState, useTransition } from "react"
+import { useState, useEffect, useTransition } from "react"
 import { Header } from "./header"
 import { QuestionBubble } from "./question-bubble"
 import { Challenge } from "./challenge"
@@ -16,8 +16,11 @@ type Props = {
     initialPercentage: number
     initialHearts: number
     initialLessonId: number
+
+    // FIXED
+
     // THE FRIKKIN PROBLEM is that challengeOptions just retrieve the first challengeOptions (Id number 1) 
-    // instead of the entire challengeOptions that correspond tot the specific challenge
+    // instead of the entire challengeOptions that correspond to the specific challenge
     initialLessonChallenges: (typeof challenges.$inferSelect & {
         completed: boolean
         challengeOptions: typeof challengeOptions.$inferSelect[]
@@ -32,10 +35,13 @@ export const Quiz = ({
     initialLessonChallenges,
     userSubscription,
 }: Props) => {
+    // could've used thunk function or reducer like method. but brain is danki, so me pegega
+
+    const [allChallengesCompleted, setAllChallengesCompleted] = useState(false);
     const [pending, startTransition] = useTransition()
-    
-    const [hearts, setHearts] = useState(50 || initialHearts)
-    const [percentage, setPercentage] = useState(50 || initialPercentage)
+
+    const [hearts, setHearts] = useState(initialHearts)
+    const [percentage, setPercentage] = useState(initialPercentage)
     const [challenges] = useState(initialLessonChallenges)
     const [activeIndex, setActiveIndex] = useState(() => {
         const uncompletedIndex = challenges.findIndex((challenge) => !challenge.completed)
@@ -49,13 +55,27 @@ export const Quiz = ({
     
     const options = challenge?.challengeOptions ?? []
 
+    useEffect(() => {
+        // Check if all challenges are completed
+        if (activeIndex === challenges.length - 1) {
+            return
+        }
+    }, [activeIndex, challenges.length]);
+    
+
     console.log("activeIndex", activeIndex)
+
+    // Bug : it will go next and next and next even tho there are no more challenges
+    // could just say return at the end of the loop, but needed to review how to count the completed challenges
+    // another Bug : dont know why the lesson cant be completed even tho challenges are all completed
 
     const onNext = () => {
         setActiveIndex((current) => current + 1);
+
     };
     
     
+    // get the option when the user click "cek"
     const onSelect = (id: number) => {
         if (status !== "none") return
 
@@ -112,7 +132,7 @@ export const Quiz = ({
     console.log("challenge", challenge)
 
     const title = challenge.type === "ASSIST" 
-        ? "Select the correct meaning" 
+        ? "Nu cen sane beneh ?" 
         : challenge.question
     
     return (
@@ -124,8 +144,9 @@ export const Quiz = ({
             />
             <div className="flex-1">
                 <div className="h-full flex items-center justify-center">
-                    <div className=" lg:min-h-[350px] lg:w-[600px] w-full px-6 lg:px-0 flex flex-col gap-y-12">
-                        <h1 className="text-lg lg:text-4xl text-center lg:text-start font-bold text-neutral-700">
+                    {/* set window for sm md lg. focus on devices rather than arbitrary screen value inside the dam code */}
+                    <div className=" md:w-[550px] lg:min-h-[350px] lg:w-[600px] w-full md:px-20 px-6 lg:px-0 flex flex-col mx-auto gap-y-12">
+                        <h1 className=" text-lg md:text-2xl lg:text-4xl text-center lg:text-start font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 shadow-md p-4 rounded-lg">
                             {title}
                         </h1>
                         <div>
@@ -139,12 +160,13 @@ export const Quiz = ({
                                 selectedOption={selectedOption}
                                 disabled={false}
                                 type={challenge.type}
+                                
                             />
                         </div>
                     </div>
                 </div>
             </div>
-            <Footer 
+            <Footer
                 disabled={!selectedOption}
                 status={status}
                 onCheck={onContinue}

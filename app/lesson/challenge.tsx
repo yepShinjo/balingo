@@ -23,17 +23,21 @@ export const Challenge = ({
     type
 }: Props) => {
     return (
+        // just do grid gap-3 if ASSIST
+        // if SELECT, make the all the options in a row but for lg make it fancy
         <div className={cn(
-            "grid gap-2",
-            type === "ASSIST" && "grid-cols-1",
-            type === "SELECT" && "grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(0,1fr))]",
+            "grid gap-3",
+            type === "ASSIST" && "grid-cols-3 lg:grid-cols-1",
+            type === "SELECT" && " grid-cols-3 lg:grid-cols-[repeat(auto-fit,minmax(0,1fr))]",
         )}>
+            {/* if options.length > 0 loop the thing */}
             {options.length > 0 && options.map((option, i) => (
                 <Card 
                     key={option.id}
                     id={option.id}
                     text={option.text}
                     imageSrc={option.imageSrc}
+                    // shortcut so user can use their number button to choose
                     shortcut={`${i + 1}`}
                     selected={selectedOption === option.id}
                     onClick={() => onSelect(option.id)}

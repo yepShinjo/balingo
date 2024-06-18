@@ -32,9 +32,9 @@ export const SidebarItem = ({label, iconSrc, href,}: Props) => {
                     <Image
                         src={iconSrc}
                         alt={label}
-                        className="mr-5"
-                        height={32}
-                        width={32}
+                        className="mr-7 ml-3"
+                        height={42}
+                        width={42}
                     />
                     {label}
                 </Link>

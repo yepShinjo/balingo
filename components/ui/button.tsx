@@ -55,11 +55,15 @@ const buttonVariants = cva(
 )
 
 export interface ButtonProps
+// our Button will extends the original button from react along with its original properties
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  // it will be extended with the buttonVariants we defined above with property asChild (boolean)
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
 }
 
+// The Button component is created using React.forwardRef, which allows it to forward its ref to the underlying DOM element.
+// ButtonProps is used to define the types of properties the Button component can accept.
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
@@ -73,6 +77,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     )
   }
 )
+
+// and then set the displayname property as Button (capital B)
 Button.displayName = "Button"
 
 export { Button, buttonVariants }

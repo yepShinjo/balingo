@@ -37,6 +37,8 @@ export const Unit = ({ id,
                     // if the lesson were looping doesnt have a completed and IS NOT the current lesson that means the lesson is locked (why check !isCurrent aswell? cuz the lesson the user currently learning can be not completed aswell)
                     const isLocked = !lesson.completed && !isCurrent
 
+                    const isCompleted = !isCurrent && !isLocked
+
                     return (
                         <LessonButton 
                             key={lesson.id}

@@ -87,8 +87,7 @@ export const upsertChallengeProgress = async (challengeId: number) => {
         completed: true,
     })
 
-    // then after creating a new challengeProgress, automatically set their points to 10.
-    // we dont need to set the hearts, because its a default of 5 in the DB
+    // then after creating a new challengeProgress, automatically set their points to + 10 (cuz the won a challenge).
     await db.update(userProgress).set({
         points: currentUserProgress.points + 10.
     }).where(eq(userProgress.userId, userId))

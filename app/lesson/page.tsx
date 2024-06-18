@@ -5,6 +5,7 @@ import { challengeOptions } from "@/db/schema"
 
 
 const LessonPage = async () => {
+    // get important data
     const lessonData = await getLesson()
     const userProgressData = await getUserProgress()
 
@@ -20,11 +21,12 @@ const LessonPage = async () => {
         redirect("/learn")
     }
 
+    // fix later, percentage doesnt work
     const initialPercentage = 
-    lesson.challenges.filter((challenge) => challenge.completed)
-    .length / lesson.challenges.length * 100
+    lesson.challenges.filter((challenge) => challenge.completed).length / lesson.challenges.length * 100
 
     return (
+        // user subscription query later
         <>
         <Quiz
             initialLessonId={lesson.id}

@@ -9,12 +9,16 @@ type Props = {
     hasActiveSubscription: boolean
 }
 
+// essential data (hearts and percentage. idk why percentage bar didnt show up. Debug Later)
+// implement hasActiveSubscription later
 export const Header = ({
     hearts,
     percentage,
     hasActiveSubscription,
 }: Props) => {
-    const { open } = useExitModal()
+    // extract open from useExitModal()
+    const exitModal = useExitModal()
+    const open = exitModal.open
 
     return (
         <header className="lg:pt-[50px] pt-[20px] px-10 flex gap-x-7 items-center justify-between max-w-[1140px] mx-auto w-full">

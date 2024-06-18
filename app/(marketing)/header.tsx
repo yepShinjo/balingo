@@ -12,11 +12,11 @@ import { Button } from "@/components/ui/button"
 
 export const Header = () => {
     return (
-        <header className="h-20 2-full border-b-2 border-slate-200 px-4">
-            <div className="lg:max-w-screen-lg mx-auto flex items-center justify-between h-full">
-                <div className="pt-8 pl-4 pb-7 flex items-center gap-x-3">
-                    <Image src="/mascot.svg" height={40} width={40} alt="Mascot"/>
-                    <h1 className="text-2xl font-extrabold text-green-600 tracking-wide">
+        <header>
+            <div className="lg:max-w-screen-lg mx-auto flex items-center justify-center h-full gap-x-20">
+                <div className="pt-6 pb-6 flex items-center justify-center ">
+                    <Image src="/mascot.svg" height={80} width={80} alt="Mascot"/>
+                    <h1 className="text-3xl font-extrabold text-green-600 tracking-wide">
                         Balingo
                     </h1>
                 </div>
@@ -32,15 +32,17 @@ export const Header = () => {
                     </SignedIn>
 
                     <SignedOut>
-                        <SignInButton 
+                        <SignInButton
                             mode="modal" 
                             forceRedirectUrl="NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL"
                             signUpForceRedirectUrl="NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL">
                             
-                        <Button size="lg" variant="ghost">Login</Button>
+                        <Button
+                            className="text-1xl pt-1"
+                            size="lg" 
+                            variant="super">Login</Button>
                         </SignInButton>
                     </SignedOut>
-
                 </ClerkLoaded>
             </div>
         </header>

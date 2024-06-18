@@ -53,7 +53,6 @@ export default function Home() {
           </ClerkLoaded>
         </div>
 
-
       </div>
     </div>
   )

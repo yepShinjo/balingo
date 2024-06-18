@@ -50,6 +50,17 @@ const main = async () => {
             
         ])
 
+        await db.insert(schema.units).values([
+            {
+                id: 2,
+                courseId: 2, // mider
+                title: "Unit 1",
+                description: "Melajah basa bali mider anggen timpal",
+                order: 1
+            },
+            
+        ])
+
         await db.insert(schema.lessons).values([
             {
                 id: 1,
@@ -83,6 +94,39 @@ const main = async () => {
             },
         ])
 
+        await db.insert(schema.lessons).values([
+            {
+                id: 6,
+                unitId: 2, // Unit 2 (Melajah basa bali mider anggen timpal)
+                title: "kruna kria", // kata kerja
+                order: 1
+            },
+            {
+                id: 7,
+                unitId: 2,
+                title: "kruna aran", // kata kerja
+                order: 2
+            },
+            {
+                id: 8,
+                unitId: 2,
+                title: "kruna 3", // kata kerja
+                order: 3
+            },
+            {
+                id: 9,
+                unitId: 2,
+                title: "kruna 4", // kata kerja
+                order: 4
+            },
+            {
+                id: 10,
+                unitId: 2,
+                title: "kruna 5", // kata kerja
+                order: 5
+            },
+        ])
+
         await db.insert(schema.challenges).values([
             {
                 id: 1,
@@ -107,6 +151,30 @@ const main = async () => {
             },
         ])
 
+        await db.insert(schema.challenges).values([
+            {
+                id: 4,
+                lessonId: 6,
+                type: "SELECT",
+                order: 1,
+                question: 'mana yang artinya "datang"?'
+            },
+            {
+                id: 5,
+                lessonId: 6,
+                type: "ASSIST",
+                order: 2,
+                question: 'Tidur?'
+            },
+            {
+                id: 6,
+                lessonId: 6,
+                type: "SELECT",
+                order: 3,
+                question: 'mana yang artinya "duduk"?'
+            },
+        ])
+
         await db.insert(schema.challengeOptions).values([
             {
                 challengeId: 1,
@@ -173,6 +241,73 @@ const main = async () => {
                 correct: true,
                 imageSrc: "/robot.png",
                 audioSrc: "/singgih_robot.mp3"
+            },
+        ])
+
+        // SECOND CHALLENGE
+        await db.insert(schema.challengeOptions).values([
+            {
+                challengeId: 4,
+                text: "negak", // duduk
+                correct: false,
+                imageSrc: "/negak.png",
+                audioSrc: "/mider_negak.mp3"
+            },
+            {
+                challengeId: 4,
+                text: "Rauh", // datang
+                correct: true,
+                imageSrc: "/rauh.png",
+                audioSrc: "/mider_rauh.mp3"
+            },
+            {
+                challengeId: 4,
+                text: "Sirep", // turu
+                correct: false,
+                imageSrc: "/sirep.png",
+                audioSrc: "/mider_sirep.mp3"
+            },
+        ])
+
+        await db.insert(schema.challengeOptions).values([
+            {
+                challengeId: 5,
+                text: "Rauh",
+                correct: false,
+                audioSrc: "/mider_rauh.mp3"
+            },
+            {
+                challengeId: 5,
+                text: "Negak",
+                correct: false,
+                audioSrc: "/mider_negak.mp3"
+            },
+            {
+                challengeId: 5,
+                text: "Sirep",
+                correct: true,
+                audioSrc: "/mider_sirep.mp3"
+            },
+        ])
+
+        await db.insert(schema.challengeOptions).values([
+            {
+                challengeId: 6,
+                text: "Rauh",
+                correct: false,
+                audioSrc: "/mider_rauh.mp3"
+            },
+            {
+                challengeId: 6,
+                text: "Negak",
+                correct: true,
+                audioSrc: "/mider_negak.mp3"
+            },
+            {
+                challengeId: 6,
+                text: "Sirep",
+                correct: false,
+                audioSrc: "/mider_sirep.mp3"
             },
         ])
 

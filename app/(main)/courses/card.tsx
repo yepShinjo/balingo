@@ -17,15 +17,15 @@ export const Card = ({title, id, imageSrc, onClick, disable, active}: Props) => 
         <div
             onClick={() => onClick(id)}
             className={cn(
-                "h-full border-2 rounded-xl border-b-4 hover:bg-black/5 cursor-pointer active:border-b-2 flex flex-col items-center justify-between p-3 pb-6 min-h-[217px] min-w-[200px]", 
-                disable && "pointer-events-none opacity-50"
+                " bg-emerald-100 border-2 rounded-xl border-b-4 border-r-4 hover:bg-emerald-50 cursor-pointer active:border-b-2 flex flex-col items-center justify-between p-3 pb-6 ", 
+                disable && "opacity-30 pointer-events-none "
             )}
         >
             <div className="min-[24px] w-full flex items-center justify-end">
                 {/* if class is active */}
                 {active && (
-                    <div className="rounded-md bg-green-600 flex items-center justify-center p-1.5">
-                        <Check className="text-white stroke-[4] h-4 w-4"/>
+                    <div className="rounded-md bg-blue-300 flex items-center justify-center p-1.5">
+                        <Check className="text-white stroke-[3]"/>
                     </div>
                 )}
                 
@@ -33,11 +33,11 @@ export const Card = ({title, id, imageSrc, onClick, disable, active}: Props) => 
             <Image 
                 src={imageSrc}
                 alt={title}
-                height={70}
-                width={93}
-                className="rounded-lg drop-shadow-md border object-cover"
+                height={80}
+                width={80}
+                className="rounded-lg"
             />
-            <p className="text-neutral-700 text-center font-bold mt-3">
+            <p className="text-zinc-700 text-center font-bold m-4 text-lg">
                 {title}
             </p>
         </div>
