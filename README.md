@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Balingo
 
-## Getting Started
+Balingo is a web application designed to help students learn Balinese and its corresponding "sor singgih basa." Inspired by Duolingo, a very famous language learning platform, Balingo stems from the necessity of having a fun and gamified platform where people can learn while earning points. The interactive user interface makes them feel like they are in a game.
 
-First, run the development server:
+## How to Clone
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Clone the project from GitHub (either by zip or pulling it straight).
+2. Make sure you have Node.js and npm installed in your local environment.
+3. Go to [Neon](https://neon.tech) and set up your PostgreSQL database, naming it `balingo`.
+4. Go to [Clerk](https://clerk.com) and create an account. This is where the authentication will be taken care of.
+5. Run `npm install` in your terminal.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Contributing
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To contribute to this project, please do a pull request or email at [gunkprema1@gmail.com](mailto:gunkprema1@gmail.com) for further collaboration.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Prerequisites
 
-## Learn More
+Make sure you have the following tools before cloning or forking the project:
 
-To learn more about Next.js, take a look at the following resources:
+- Git
+- Node.js
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+You can also see the issue panel where we can discuss the problems and bugs found in the current or previous state of the project.
