@@ -2,6 +2,9 @@
 
 Balingo is a web application designed to help students learn Balinese and its corresponding "sor singgih basa." Inspired by Duolingo, a very famous language learning platform, Balingo stems from the necessity of having a fun and gamified platform where people can learn while earning points. The interactive user interface makes them feel like they are in a game.
 
+![Uploading image.png…]()
+
+
 ## How to Clone
 
 1. Clone the project from GitHub (either by zip or pulling it straight).
