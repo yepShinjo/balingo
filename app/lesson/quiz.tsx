@@ -1,92 +1,74 @@
-"use client"
+"use client";
 
-import { challengeOptions, challenges } from "@/db/schema"
-import { useState, useEffect, useTransition } from "react"
+import { challengeOptions, challenges as challengeSchema } from "@/db/schema"
+import { useState, useTransition, useEffect } from "react"
+import { useRouter } from "next/router"
 import { Header } from "./header"
 import { QuestionBubble } from "./question-bubble"
 import { Challenge } from "./challenge"
 import { Footer } from "./footer"
 import { upsertChallengeProgress } from "@/actions/challenge-progress"
 import { toast } from "sonner"
-import { redirect } from "next/dist/server/api-utils"
-
-
 
 type Props = {
     initialPercentage: number
     initialHearts: number
     initialLessonId: number
-
-    // FIXED
-
-    // THE FRIKKIN PROBLEM is that challengeOptions just retrieve the first challengeOptions (Id number 1) 
-    // instead of the entire challengeOptions that correspond to the specific challenge
-    initialLessonChallenges: (typeof challenges.$inferSelect & {
+    initialLessonChallenges: (typeof challengeSchema.$inferSelect & {
         completed: boolean
-        challengeOptions: typeof challengeOptions.$inferSelect[]
-    })[]
+        challengeOptions: typeof challengeOptions.$inferSelect[];
+    })[];
     userSubscription: any
-}
+};
 
-export const Quiz = ({ 
+export const Quiz = ({
     initialPercentage,
     initialHearts,
     initialLessonId,
     initialLessonChallenges,
     userSubscription,
 }: Props) => {
-    // could've used thunk function or reducer like method. but brain is danki, so me pegega
-
-    const [allChallengesCompleted, setAllChallengesCompleted] = useState(false);
+    const router = useRouter()
     const [pending, startTransition] = useTransition()
-
     const [hearts, setHearts] = useState(initialHearts)
     const [percentage, setPercentage] = useState(initialPercentage)
     const [challenges] = useState(initialLessonChallenges)
     const [activeIndex, setActiveIndex] = useState(() => {
         const uncompletedIndex = challenges.findIndex((challenge) => !challenge.completed)
         return uncompletedIndex === -1 ? 0 : uncompletedIndex
-    })
-
+    });
     const [selectedOption, setSelectedOption] = useState<number>()
     const [status, setStatus] = useState<"correct" | "wrong" | "none">("none")
-    
-    const challenge = challenges[activeIndex]
-    
-    const options = challenge?.challengeOptions ?? []
+    const [allChallengesCompleted, setAllChallengesCompleted] = useState(false)
 
     useEffect(() => {
         // Check if all challenges are completed
-        if (activeIndex === challenges.length - 1) {
-            return
+        if (activeIndex >= challenges.length) {
+            setAllChallengesCompleted(true)
+        } else {
+            setAllChallengesCompleted(false)
         }
-    }, [activeIndex, challenges.length]);
-    
+    }, [activeIndex, challenges.length])
 
-    console.log("activeIndex", activeIndex)
-
-    // Bug : it will go next and next and next even tho there are no more challenges
-    // could just say return at the end of the loop, but needed to review how to count the completed challenges
-    // another Bug : dont know why the lesson cant be completed even tho challenges are all completed
+    const challenge = challenges[activeIndex]
+    const options = challenge?.challengeOptions ?? []
 
     const onNext = () => {
-        setActiveIndex((current) => current + 1);
-
+        if (activeIndex < challenges.length - 1) {
+            setActiveIndex((current) => current + 1)
+        } else {
+            setAllChallengesCompleted(true)
+        }
     };
-    
-    
-    // get the option when the user click "cek"
+
     const onSelect = (id: number) => {
         if (status !== "none") return
-
         setSelectedOption(id)
-    }
+    };
 
-    // will be able to be fired when status is correct or even wrong
     const onContinue = () => {
         if (!selectedOption) return
 
-        // if they choose wrong, let them choose again
         if (status === "wrong") {
             setStatus("none")
             setSelectedOption(undefined)
@@ -123,28 +105,35 @@ export const Quiz = ({
                     }
                 })
                 .catch(() => toast.error("Something went wrong"))
-            })
+            });
         } else {
             console.error("incorrect option!")
         }
+    };
+
+    useEffect(() => {
+        if (allChallengesCompleted) {
+            router.push("/learn")
+        }
+    }, [allChallengesCompleted, router])
+
+    if (!challenge) {
+        return <div>Loading...</div>
     }
 
-    console.log("challenge", challenge)
-
-    const title = challenge.type === "ASSIST" 
-        ? "Nu cen sane beneh ?" 
+    const title = challenge.type === "ASSIST"
+        ? "Nu cen sane beneh ?"
         : challenge.question
-    
+
     return (
         <>
-            <Header 
+            <Header
                 hearts={hearts}
                 percentage={percentage}
                 hasActiveSubscription={!!userSubscription?.isActive}
             />
             <div className="flex-1">
                 <div className="h-full flex items-center justify-center">
-                    {/* set window for sm md lg. focus on devices rather than arbitrary screen value inside the dam code */}
                     <div className=" md:w-[550px] lg:min-h-[350px] lg:w-[600px] w-full md:px-20 px-6 lg:px-0 flex flex-col mx-auto gap-y-12">
                         <h1 className=" text-lg md:text-2xl lg:text-4xl text-center lg:text-start font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 shadow-md p-4 rounded-lg">
                             {title}
@@ -153,14 +142,13 @@ export const Quiz = ({
                             {challenge.type === "ASSIST" && (
                                 <QuestionBubble question={challenge.question} />
                             )}
-                            <Challenge 
+                            <Challenge
                                 options={options}
                                 onSelect={onSelect}
                                 status={status}
                                 selectedOption={selectedOption}
                                 disabled={false}
                                 type={challenge.type}
-                                
                             />
                         </div>
                     </div>
