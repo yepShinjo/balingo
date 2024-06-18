@@ -23,3 +23,10 @@ Make sure you have the following tools before cloning or forking the project:
 
 ## Issue
 You can also see the issue panel where we can discuss the problems and bugs found in the current or previous state of the project.
+
+## Further Development
+
+- Rangking
+- Tugas
+- Meblanja
+will be developed later
