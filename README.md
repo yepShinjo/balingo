@@ -15,6 +15,14 @@ Balingo is a web application designed to help students learn Balinese and its co
 4. Go to [Clerk](https://clerk.com) and create an account. This is where the authentication will be taken care of.
 5. Run `npm install` in your terminal.
 
+## How to Use
+
+1. Click the Login button on Top of the page, or
+2. If you already have an account, click "Lantur Melajah"
+3. Proceed to sign up or login using your account, or a google account
+4. Select your courses
+5. Proceed with the first Lesson
+
 ## Contributing
 
 To contribute to this project, please do a pull request or email at [gunkprema1@gmail.com](mailto:gunkprema1@gmail.com) for further collaboration.
@@ -31,6 +39,7 @@ You can also see the issue panel where we can discuss the problems and bugs foun
 
 ## Further Development
 
+- "Sor" Courses
 - Rangking
 - Tugas
 - Meblanja
