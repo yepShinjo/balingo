@@ -10,6 +10,7 @@ import {
   UserButton
 } from '@clerk/nextjs'
 import { ExitModal } from "@/components/modals/exit-modal";
+import Head from "next/head";
 
 const font = Nunito({ subsets: ["latin"] });
 
@@ -26,6 +27,9 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
+        <Head>
+          <meta name="dicoding:email" content="gunkprema1@gmail.com" />
+        </Head>
         <body className={font.className}>
           <Toaster />
           <ExitModal />
